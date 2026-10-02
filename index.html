@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أكواد التنقيب في البيانات - Data Mining</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  }
+  body {
+    background: #f0f2f5;
+    color: #1a1a2e;
+    padding: 16px;
+    line-height: 1.7;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #0f3460;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+  .toolbar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .toolbar button {
+    background: #1a5276;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s;
+  }
+  .toolbar button:hover {
+    background: #2980b9;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+  }
+  .card-header {
+    background: linear-gradient(135deg, #1a5276, #2980b9);
+    color: #fff;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .card-header .num {
+    background: rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 0.85rem;
+  }
+  .code-wrap {
+    position: relative;
+    background: #1e1e2e;
+  }
+  pre {
+    background: #1e1e2e;
+    color: #e0e0e0;
+    padding: 16px;
+    padding-top: 48px;
+    overflow-x: auto;
+    direction: ltr;
+    text-align: left;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre;
+    tab-size: 4;
+  }
+  pre::-webkit-scrollbar {
+    height: 8px;
+  }
+  pre::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s, transform 0.1s;
+    z-index: 2;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  }
+  .copy-btn:hover {
+    background: #219a52;
+  }
+  .copy-btn:active {
+    transform: scale(0.96);
+  }
+  .copy-btn.copied {
+    background: #f39c12;
+  }
+  .note {
+    background: #fff8e1;
+    border-right: 4px solid #f39c12;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: #7a5c00;
+    margin: 0;
+  }
+  .footer {
+    text-align: center;
+    color: #888;
+    font-size: 0.8rem;
+    margin-top: 30px;
+    padding-bottom: 20px;
+  }
+  @media (max-width: 600px) {
+    body { padding: 10px; }
+    h1 { font-size: 1.25rem; }
+    pre { font-size: 0.78rem; padding: 12px; padding-top: 44px; }
+    .card-header { font-size: 0.88rem; padding: 10px 12px; }
+    .copy-btn { padding: 5px 10px; font-size: 0.75rem; }
+    .toolbar button { padding: 8px 14px; font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>📊 أكواد التنقيب في البيانات</h1>
+<p class="subtitle">Data Mining Practical Labs — المستوى الرابع — إعداد: أ. عمران عبدالرحمن القاضي</p>
+
+<div class="toolbar">
+  <button onclick="copyAllCodes()">📋 نسخ جميع الأكواد</button>
+</div>
+
+<!-- ================= 1 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>1) قراءة ملف نصي كامل (Text File)</span>
+    <span class="num">التجربة الأولى</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>with open("data_sample.txt", "r", encoding="utf-8") as file:
+    content = file.read()
+
+print(" --- محتوى الملف --- ")
+print(content)</pre>
+  </div>
+</div>
+
+<!-- ================= 2 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>2) المرور على الأسطر وطباعتها</span>
+    <span class="num">التجربة الأولى - تحديث</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>for line in all_lines:
+    print(line.strip())</pre>
+  </div>
+</div>
+
+<!-- ================= 3 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>3) كتابة وقراءة ملف CSV باستخدام csv</span>
+    <span class="num">التجربة الثانية - الطريقة الأولى</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import csv
+
+# 1. إنشاء الملف والكتابة فيه
+with open("csv1.csv", "w", newline="") as f:
+    w1 = csv.writer(f)
+    w1.writerows([["name", "age", "grade"], ["ali", "12", "90"], ["amran", "12", "50"]])
+
+# 2. قراءة الملف وطباعة العمود الأول فقط (الأبسط)
+with open("csv1.csv", "r", newline="") as f:
+    w1 = csv.reader(f)
+    for i in w1:
+        print(i[0])
+
+# 3. قراءة الملف كقائمة وطباعة السطر الثاني
+with open("csv1.csv", "r", newline="") as f:
+    w1 = list(csv.reader(f))
+    print(w1[1])</pre>
+  </div>
+</div>
+
+<!-- ================= 4 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>4) الإضافة على ملف CSV موجود (Append)</span>
+    <span class="num">التجربة الثانية - الطريقة الثانية</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import csv
+
+# 1. فتح الملف في وضع الإلحاق (Append) والكتابة فيه
+with open("csv2.csv", "a", newline="") as f:
+    w1 = csv.writer(f)
+    w1.writerows([["name", "age", "grade"], ["ali", "12", "90"], ["amran", "12", "50"]])
+
+# 2. قراءة الملف وطباعة الصفوف بتنسيق نصوص مرتبة
+with open("csv2.csv", "r", newline="") as f:
+    w1 = csv.reader(f)
+    for i in w1:
+        # طباعة العناصر مفصولة بمكافئ زر Tab وبدون أقواس
+        print(" ".join(i))</pre>
+  </div>
+</div>
+
+<!-- ================= 5 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>5) قراءة ملف PDF كامل باستخدام PyMuPDF (fitz)</span>
+    <span class="num">التدريب رقم 2 - البرنامج الأول</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import fitz
+
+f = fitz.open("sss.pdf")
+
+print("عدد الصفحات الإجمالي:", len(f))
+
+for i in f:
+    text = i.get_text()
+    print(text)</pre>
+  </div>
+  <p class="note">⚠️ ملاحظة: يجب مراعاة المسافات عند كتابة الأكواد لأن لغة البايثون حساسة جداً في المسافات.</p>
+</div>
+
+<!-- ================= 6 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>6) قراءة صفحة محددة من ملف PDF</span>
+    <span class="num">التدريب رقم 2 - البرنامج الثاني</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import fitz
+
+f = fitz.open("sss.pdf")
+
+page = f[20]
+
+print(page.get_text())</pre>
+  </div>
+</div>
+
+<!-- ================= 7 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>7) عملية الدمج والتدوير (Matrix Transposition)</span>
+    <span class="num">التدريب رقم 2 - البرنامج الثالث</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>w1 = ["ali", "sam", "omr"]
+w2 = [20, 100, 50]
+w3 = [20000, 90000, 40000]
+
+x = [w1, w2, w3]
+y = []
+
+for i in range(len(x[0])):
+    y.append([])
+    for j in range(len(x)):
+        y[i].append(x[j][i])
+
+a, b, c = y[0], y[1], y[2]
+print(a, b, c)
+
+# ---------- Output ----------
+# ['ali', 20, 20000] ['sam', 100, 90000] ['omr', 50, 40000]</pre>
+  </div>
+</div>
+
+<!-- ================= 8 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>8) تحليل النصوص (Text Mining) مع Pandas</span>
+    <span class="num">التدريب رقم 2 - برنامج آخر</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import pandas as pd
+
+with open("fill.txt", "r", encoding="utf-8") as f:
+    lines = f.readlines()
+
+data = pd.DataFrame(lines, columns=["line_text"])
+data["word_count"] = data["line_text"].apply(lambda x: len(x.split()))
+
+print(data)
+
+# ---------- Output ----------
+#   line_text                     word_count
+# 0  مرحباً بك في عالم التنقيب      5
+# 1  Pandas is text processing tool 5</pre>
+  </div>
+</div>
+
+<!-- ================= 9 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>9) كشف العناصر الفريدة والمكررة في قائمة نصية</span>
+    <span class="num">التدريب رقم 3 - البرنامج الأول</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>def find_duplicates(y):
+    d = []        # قائمة حفظ العناصر الفريدة
+    dd = []       # قائمة حفظ العناصر المكررة
+    for i in y:
+        if i in d and i not in dd:
+            dd.append(i)
+        if i not in d:
+            d.append(i)
+    return d, dd
+
+# قائمة البيانات التوضيحية
+name = ["ali", "sam", "omr", "sam", "omr", "sam", "asma", "tom"]
+
+d, dd = find_duplicates(name)
+
+print("العناصر الفريدة (Unique):", d)
+print("العناصر المكررة (Duplicates):", dd)
+
+# ---------- Output ----------
+# العناصر الفريدة (Unique): ['ali', 'sam', 'omr', 'asma', 'tom']
+# العناصر المكررة (Duplicates): ['sam', 'omr']</pre>
+  </div>
+  <p class="note">⚠️ ملاحظة: يجب مراعاة الإزاحات البرمجية (Indentation) بدقة، حيث تتطلب لغة بايثون ترك مسافة 4 مسافات لكل مستوى إزاحة.</p>
+</div>
+
+<!-- ================= 10 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>10) حساب عدد تكرارات كل عنصر وإيجاد الأكثر تكراراً</span>
+    <span class="num">التدريب رقم 3 - البرنامج الثاني</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>name = ["ali", "sam", "omr", "sam", "omr", "sam", "asma", "tom"]
+
+ff = {}
+
+for i in name:
+    if i in ff:
+        ff[i] += 1
+    else:
+        ff[i] = 1
+
+print("عدد تكرار كل عنصر:", ff)
+
+# تحديد العنصر الأكثر تكراراً وعدد مرات تكراره
+mf = max(ff, key=ff.get)
+count = ff[mf]
+
+print("العنصر الأكثر تكرارا:", mf)
+print("عدد مرات تكراره:", count)
+
+# ---------- Output ----------
+# عدد تكرار كل عنصر: {'ali': 1, 'sam': 3, 'omr': 2, 'asma': 1, 'tom': 1}
+# العنصر الأكثر تكرارا: sam
+# عدد مرات تكراره: 3</pre>
+  </div>
+</div>
+
+<!-- ================= 11 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>11) إنشاء ملف CSV وقراءة الأعمدة واكتشاف التكرارات الرقمية</span>
+    <span class="num">التدريب رقم 3 - البرنامج الثالث</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import pandas as pd
+
+# 1. إنشاء ملف CSV
+data = {
+    'number': [2, 3, 2, 5, 3, 1, 5, 5],
+    'name': ["ali", "sam", "omr", "sam", "omr", "sam", "ali", "sam"]
+}
+df = pd.DataFrame(data)
+df.to_csv("amran1.csv", index=False)
+print("تم إنشاء الملف amran1.csv بنجاح !")
+
+# 2. قراءة الملف
+df = pd.read_csv("amran1.csv")
+
+# 3. استخراج عمود رقمي وتحويله إلى قائمة
+ag = df["number"].tolist()
+print("القائمة المأخوذة من العمود:", ag)
+
+# 4. دالة كشف العناصر الفريدة والمكررة
+def aa(a):
+    d = []
+    dd = []
+    for i in a:
+        if i in d and i not in dd:
+            dd.append(i)
+        if i not in d:
+            d.append(i)
+    return d, dd
+
+# 5. استدعاء الدالة وتمرير القائمة
+d, dd = aa(ag)
+print("العناصر الفريدة:", d)
+print("العناصر المكررة:", dd)
+
+# ---------- Output ----------
+# تم إنشاء الملف amran1.csv بنجاح !
+# القائمة المأخوذة من العمود: [2, 3, 2, 5, 3, 1, 5, 5]
+# العناصر الفريدة: [2, 3, 5, 1]
+# العناصر المكررة: [2, 3, 5]</pre>
+  </div>
+</div>
+
+<!-- ================= 12 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>12) قراءة بيانات الأعمار من ملف CSV وتصنيفها</span>
+    <span class="num">التدريب رقم 3 - البرنامج الرابع</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import pandas as pd
+
+df = pd.read_csv("amr1.csv")
+
+ag = df["age"].tolist()
+
+print("قائمة الأعمار المستخرجة:", ag)
+print(" ")
+
+# دالة تصفية الأعمار الفريدة والمكررة
+def aa(a):
+    d = []        # قائمة الأعمار الفريدة
+    dd = []       # قائمة الأعمار المكررة
+    for i in a:
+        if i in d and i not in dd:
+            dd.append(i)
+        if i not in d:
+            d.append(i)
+
+    return d, dd
+
+# استدعاء الدالة وتمرير قائمة الأعمار
+d, dd = aa(ag)
+
+print("الأعمار الفريدة (بدون تكرار):", d)
+print("الأعمار المكررة:", dd)
+
+# ---------- Output ----------
+# قائمة الأعمار المستخرجة: [30, 30, 18, 25, 30, 20, 25, 20]
+# الأعمار الفريدة (بدون تكرار): [18, 30, 25, 20]
+# الأعمار المكررة: [30, 25, 20]</pre>
+  </div>
+</div>
+
+<!-- ================= 13 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>13) إيجاد القيم المفقودة في قائمة مرتبة</span>
+    <span class="num">التدريب رقم 4 و 5 - أولاً</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>def find_missing_sorted(n):
+    num = set(n)
+    out = []
+    for i in range(n[0], n[-1]):
+        if i not in num:
+            out.append(i)
+    return out
+
+list1 = [1, 2, 4, 6]
+
+# استدعاء الدالة
+l1 = find_missing_sorted(list1)
+
+# طباعة النتائج
+print("القيم المفقودة في القائمة المرتبة", l1)
+
+# ---------- Output ----------
+# القيم المفقودة في القائمة المرتبة [3, 5]</pre>
+  </div>
+</div>
+
+<!-- ================= 14 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>14) إيجاد القيم المفقودة في قائمة غير مرتبة</span>
+    <span class="num">التدريب رقم 4 و 5 - ثانياً</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>def find_missing_unsorted(n):
+    num = set(n)
+    out = []
+    for i in range(min(n), max(n)):
+        if i not in num:
+            out.append(i)
+
+    return out
+
+list1 = [6, 7, 1, 3]
+l1 = find_missing_unsorted(list1)
+print("القيم المفقودة في القائمة غير المرتبة:", l1)
+
+# ---------- Output ----------
+# القيم المفقودة في القائمة غير المرتبة: [2, 4, 5]</pre>
+  </div>
+</div>
+
+<!-- ================= 15 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>15) استخراج الحروف الأولى وإنشاء الاختصارات النصية</span>
+    <span class="num">التدريب رقم 4 و 5 - ثالثاً</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>user_text = input("ادخل النص: ")
+words_list = user_text.split()
+acronym = ""
+for word in words_list:
+    acronym += word[0].upper()
+
+print("الاختصار الناتج:", acronym)
+
+# ---------- Output ----------
+# ادخل النص: data mining laboratory
+# الاختصار الناتج: DML</pre>
+  </div>
+  <p class="note">⚠️ ملاحظة: يُرجى الانتباه والالتزام الدقيق بقواعد الإزاحة المقدمة (Indentation) عند كتابة برامج بلغة Python.</p>
+</div>
+
+<!-- ================= 16 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>16) المخطط الخطي (Line Plot)</span>
+    <span class="num">التدريب رقم 5 - أولاً</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import matplotlib.pyplot as plt
+
+# 1. إعداد البيانات
+x = ["المستوى1", "المستوى2", "المستوى3", "المستوى4"]
+y = [50, 60, 70, 75]
+
+# 2. إنشاء لوحة الرسم وتحديد الأبعاد
+plt.figure(figsize=(8, 5))
+
+# 3. رسم الخط
+plt.plot(x, y, "ro--", alpha=0.6, label="المعدل")
+
+# 4. إضافة القيم فوق كل نقطة
+for i, val in enumerate(y):
+    plt.text(x[i], val + 0.15, str(val), ha="center", fontweight="bold")
+
+# 5. العناوين
+plt.title("مستوى الطالب والمعدل الدراسي")
+plt.xlabel("المستوى الدراسي")
+plt.ylabel("المعدل")
+plt.legend()  # مفتاح الرسم
+
+# 6. عرض الرسم
+plt.show()</pre>
+  </div>
+</div>
+
+<!-- ================= 17 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>17) المخطط العمودي (Bar Chart)</span>
+    <span class="num">التدريب رقم 5 - ثانياً</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import matplotlib.pyplot as plt
+
+# بيانات المبيعات لأربعة أصناف مختلفة خلال شهر
+الاصناف = ["جوال", "لابتوب", "سماعة", "شاحن"]
+المبيعات = [150, 200, 85, 120]
+
+# إنشاء لوحة الرسم
+plt.figure(figsize=(9, 5))
+
+# رسم الأعمدة البيانية
+plt.bar(الاصناف, المبيعات, color='skyblue', edgecolor='navy')
+
+# إضافة العناوين
+plt.title("مبيعات الأصناف خلال شهر سبتمبر")
+plt.xlabel("نوع الصنف")
+plt.ylabel("عدد القطع المبيعة")
+
+# إضافة القيم فوق كل عمود (تم تصحيح القوس المفقود هنا)
+for i, v in enumerate(المبيعات):
+    plt.text(i, v + 5, str(v), ha='center', fontsize=11, fontweight='bold')
+
+plt.show()</pre>
+  </div>
+</div>
+
+<!-- ================= 18 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>18) حساب مقاييس النزعة المركزية (المتوسط، الوسيط، المنوال)</span>
+    <span class="num">التدريب رقم 6 - البرنامج الأول</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre># 1. إسناد مجموعة البيانات وتحديد طولها
+data = [3, 5, 4]
+n = len(data)
+
+# 2. حساب المتوسط الحسابي (Mean)
+mean = sum(data) / n
+print(mean)
+
+# 3. حساب الوسيط (Median) بالطريقة الشرطية (If-Else)
+s = sorted(data)
+mid = n // 2
+if n % 2 != 0:
+    median = s[mid]
+else:
+    median = (s[mid - 1] + s[mid]) / 2
+print(median)
+
+# 4. حساب الوسيط بطريقة رياضية مختصرة
+ddd = (s[n // 2] + s[(n - 1) // 2]) / 2
+print(ddd)
+
+# 5. حساب المنوال (Mode) باستخدام القاموس وحلقة تكرارية
+cc = {}
+for i in data:
+    if i in cc:
+        cc[i] += 1
+    else:
+        cc[i] = 1
+
+max_c = 0
+mode = None
+for i, j in cc.items():
+    if j > max_c:
+        max_c = j
+        mode = i
+print(mode)
+
+# 6. حساب المنوال بطريقة مختصرة باستخدام دالة max
+meed = max(data, key=data.count)
+print(meed)
+
+# ---------- Output ----------
+# 4.0
+# 4
+# 4.0
+# 3
+# 3</pre>
+  </div>
+</div>
+
+<!-- ================= 19 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>19) حساب نسبة التشابه والاختلاف بين النصوص</span>
+    <span class="num">التدريب رقم 6 - البرنامج الثاني</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>from difflib import SequenceMatcher
+
+# 1. إدخال النصوص المراد مقارنتها
+text1 = "my name is amran"
+text2 = "my name is amren"
+
+# 2. حساب نسبة التشابه (Similarity Ratio)
+ss = SequenceMatcher(None, text1, text2).ratio()
+
+# 3. حساب نسبة الاختلاف (Dissimilarity / Distance)
+diff = 1 - ss
+
+# 4. طباعة النتائج بنسبة مئوية ومحددة بفاصلتين عشريتين
+print(f"نسبة التشابه: {ss * 100:.2f}%")
+print(f"نسبة الاختلاف: {diff * 100:.2f}%")
+
+# ---------- Output ----------
+# نسبة التشابه: 93.75%
+# نسبة الاختلاف: 6.25%</pre>
+  </div>
+</div>
+
+<!-- ================= 20 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>20) حساب المسافة الإقليدية لتقييم تشابه المنتجات</span>
+    <span class="num">التدريب رقم 6 - البرنامج الأول (NLP)</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>products = {"Laptop A": [1000, 4.5], "Laptop B": [950, 4.3], "Phone X": [300, 4.0]}
+new_item = [980, 4.4]
+distances = {}
+
+for name, feat in products.items():
+    squared_differences = []
+    for p, n in zip(feat, new_item):
+        diff = p - n          # الفرق بين الخاصيتين
+        squared_diff = diff ** 2    # تربيع الفرق
+        squared_differences.append(squared_diff)
+
+    # جمع مربعات الفروق
+    sum_of_squares = sum(squared_differences)
+
+    # أخذ الجذر التربيعي للمجموع (حساب المسافة الإقليدية)
+    euclidean_distance = sum_of_squares ** 0.5
+
+    # تقريب الناتج وتخزينه في القاموس تحت اسم المنتج الحالي
+    distances[name] = round(euclidean_distance, 2)
+
+print("المسافات الحسابية:", distances)
+print("المنتج الأقرب هو:", min(distances, key=distances.get))
+
+# ---------- Output ----------
+# المسافات الحسابية: {'Laptop A': 20.0, 'Laptop B': 30.0, 'Phone X': 680.0}
+# المنتج الأقرب هو: Laptop A</pre>
+  </div>
+</div>
+
+<!-- ================= 21 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>21) تجميع الكلمات المترادفة (Anagrams) — NLP</span>
+    <span class="num">التدريب رقم 6 - البرنامج الثاني (NLP)</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>from collections import defaultdict
+
+words = ["cat", "act", "tac", "dog", "god", "listen", "silent", "enlist", "python"]
+
+anagram_groups = defaultdict(list)
+
+for word in words:
+    sorted_key = "".join(sorted(word))
+    anagram_groups[sorted_key].append(word)
+
+for key, group in anagram_groups.items():
+    print(f"المجموعة ({key}): {group}")
+
+# ---------- Output ----------
+# المجموعة (act): ['cat', 'act', 'tac']
+# المجموعة (dgo): ['dog', 'god']
+# المجموعة (eilnst): ['listen', 'silent', 'enlist']
+# المجموعة (hnopty): ['python']</pre>
+  </div>
+</div>
+
+<!-- ================= 22 ================= -->
+<div class="card">
+  <div class="card-header">
+    <span>22) القواعد الاقترانية (Association Rules)</span>
+    <span class="num">التدريب رقم 7</span>
+  </div>
+  <div class="code-wrap">
+    <button class="copy-btn" onclick="copyCode(this)">📋 نسخ</button>
+<pre>import itertools
+from collections import defaultdict
+
+transactions = [
+    ["جبن", "حليب", "خبز"],
+    ["حليب", "خبز"],
+    ["خبز", "تفاح"],
+    ["جبن", "حليب"],
+    ["جبن", "حليب", "خبز"]
+]
+
+total = len(transactions)
+min_support = 0.4
+min_confidence = 0.6
+
+item_counts = defaultdict(int)
+pair_counts = defaultdict(int)
+
+for trans in transactions:
+    for item in trans:
+        item_counts[item] += 1
+
+    pairs = itertools.combinations(sorted(trans), 2)
+    for pair in pairs:
+        pair_counts[pair] += 1
+
+print("القواعد الاقترانية اكتشفت:")
+for pair, count in pair_counts.items():
+    support = count / total
+
+    if support >= min_support:
+        itemA = pair[0]
+        itemB = pair[1]
+
+        conf_A_B = count / item_counts[itemA]
+        if conf_A_B >= min_confidence:
+            print(f"إذا اشترى {itemA} -> يشتري {itemB} (ثقة: {conf_A_B:.0%})")
+
+        conf_B_A = count / item_counts[itemB]
+        if conf_B_A >= min_confidence:
+            print(f"إذا اشترى {itemB} -> يشتري {itemA} (ثقة: {conf_B_A:.0%})")
+
+# ---------- Output ----------
+# القواعد الاقترانية اكتشفت:
+# إذا اشترى جبن -> يشتري حليب (ثقة: 100%)
+# إذا اشترى حليب -> يشتري جبن (ثقة: 75%)
+# إذا اشترى جبن -> يشتري خبز (ثقة: 67%)
+# إذا اشترى خبز -> يشتري حليب (ثقة: 75%)
+# إذا اشترى حليب -> يشتري خبز (ثقة: 75%)</pre>
+  </div>
+</div>
+
+<div class="footer">
+  <p>© أكواد التنقيب في البيانات - Data Mining Practical Labs</p>
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.parentElement.querySelector('pre');
+  const text = pre.innerText;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showCopied(btn);
+    }).catch(() => {
+      fallbackCopy(text, btn);
+    });
+  } else {
+    fallbackCopy(text, btn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    showCopied(btn);
+  } catch (e) {
+    alert('تعذر النسخ، يرجى النسخ يدوياً');
+  }
+  document.body.removeChild(textarea);
+}
+
+function showCopied(btn) {
+  const original = btn.innerHTML;
+  btn.innerHTML = '✅ تم النسخ';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.innerHTML = original;
+    btn.classList.remove('copied');
+  }, 1500);
+}
+
+function copyAllCodes() {
+  const preElements = document.querySelectorAll('pre');
+  let allText = '';
+
+  preElements.forEach((pre, index) => {
+    allText += `# ================= كود رقم ${index + 1} =================\n`;
+    allText += pre.innerText + '\n\n';
+  });
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(allText).then(() => {
+      const btn = document.querySelector('.toolbar button');
+      const original = btn.innerHTML;
+      btn.innerHTML = '✅ تم نسخ جميع الأكواد';
+      setTimeout(() => btn.innerHTML = original, 2000);
+    }).catch(() => {
+      fallbackCopyAll(allText);
+    });
+  } else {
+    fallbackCopyAll(allText);
+  }
+}
+
+function fallbackCopyAll(text) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    const btn = document.querySelector('.toolbar button');
+    const original = btn.innerHTML;
+    btn.innerHTML = '✅ تم نسخ جميع الأكواد';
+    setTimeout(() => btn.innerHTML = original, 2000);
+  } catch (e) {
+    alert('تعذر النسخ، يرجى النسخ يدوياً');
+  }
+  document.body.removeChild(textarea);
+}
+</script>
+
+</body>
+</html>
